@@ -1,0 +1,95 @@
+﻿@model IEnumerable<finalpr.Models.items>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home page</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/css/style.css" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+    @{
+        Layout = "~/Views/Shared/customerLayout.cshtml";
+    }
+
+
+</head>
+<body>
+    <div style="bottom: 300px;background-color: rgba(0, 0, 0, 0.325); margin: 50px;" class="blackBackground">
+        <div id="crs" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+
+                @{
+                    int i = 0;
+                }
+                @foreach (items item in Model)
+
+                {
+                    if (i == 0)
+                    {
+                        <div class="carousel-item active">
+                            <img style="margin-left: 250px"
+                                 width="150px%"
+                                 src="~/images/@Model.First().image"
+                                 alt=" slide" />
+                            <div class="carousel-caption">
+                                <a style="color:white;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif" asp-controller="items" asp-action="customerDetails" asp-route-id="@Model.First().Id">Buy @Model.First().name</a>
+
+                            </div>
+                        </div>
+                        <a class="carousel-control-prev" href="#crs" data-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </a>
+
+
+                        <a class="carousel-control-next" href="#crs" data-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </a>
+
+                    }
+
+                    else
+                    {
+                        <div class="carousel-item">
+                            <img class="text-center"
+                                 style="margin-left: 250px"
+                                 width="200px%"
+                                 src="~/images/@Model.ElementAt(i).image"
+                                 alt=" slide" />
+                            <div class="carousel-caption">
+                                <a style="color:white;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif" asp-controller="items" asp-action="customerDetails" asp-route-id="@item.Id">Buy @item.name</a>
+
+                            </div>
+                        </div>
+
+
+                        <a class="carousel-control-prev" href="#crs" data-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </a>
+
+                        <a class="carousel-control-next" href="#crs" data-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </a>
+
+
+                    }
+                    i++;
+                }
+            </div>
+        </div>
+    </div>
+</body>
+
+
+</html>

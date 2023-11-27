@@ -1,0 +1,57 @@
+﻿@model IEnumerable<finalpr.Models.orders>
+@{
+    ViewData["Title"] = "mypurchase";
+}
+
+<h1>mypurchse</h1>
+@{
+    Layout = "~/Views/Shared/customerLayout.cshtml";
+}
+<p>
+
+</p>
+<div id="blackBackground">
+    <table class="table text-light">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.userid)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.itemid)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.buyDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.quantity)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.userid)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.itemid)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.buyDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.quantity)
+                    </td>
+                    <td>
+
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

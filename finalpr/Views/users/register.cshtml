@@ -1,0 +1,145 @@
+﻿@{
+    ViewData["Title"] = "register";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        /* CSS for the body and html elements */
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        /* CSS for the body */
+        body {
+            background-image: url('https://rare-gallery.com/uploads/posts/120614-beach-twilight-purple-sky-4k-8k.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Rest of the CSS */
+        #register {
+            width: 400px;
+            height: 700px;
+            padding: 16px;
+            background-color: rgba(255, 255, 255, 0.5);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .container input[type=text],
+        .container input[type=password],
+        .container input[type=email],
+        .container input[type=date] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        .container button {
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-success {
+            background-color: #4CAF50;
+        }
+
+        .btn-danger {
+            background-color: #dd3545;
+        }
+
+        .container .login-link {
+            text-align: center;
+            margin-top: 12px;
+        }
+
+    </style>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign up page</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="~/css/style.css" />
+    <script></script>
+
+</head>
+<body>
+    <div id="register">
+        <div>
+            <form action="register" id="Form" method="post">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text"
+                           name="name"
+                           class="form-control"
+                           id=""
+                           placeholder=" Username"
+                           required />
+                </div>
+
+                <div class="form-group">
+                    <label id="firstPasswordLabel">Password</label>
+                    <input type="password"
+                           name="password"
+                           class="form-control"
+                           id="firstPassword"
+                           placeholder="Password"
+                           required />
+                </div>
+
+                <div class="form-group">
+                    <label id="secondPasswordLabel">Confirm password</label>
+                    <input type="password"
+                           name=""
+                           class="form-control"
+                           id="secondPassword"
+                           placeholder="Confirm the password"
+                           required />
+                </div>
+
+
+
+
+
+                <div class="form-group">
+                    <label id="terms">Do you agree</label>
+                    <input type="checkbox"
+                           name=""
+                           class="checkbox"
+                           id="termsCheckbox" />
+                </div>
+                <div class="form-group">
+                    <button type="submit"
+                            onclick="check(event)"
+                            class="btn btn-success">
+                        Sign up
+                    </button>
+
+                    <input type="reset" value="Clear" class="btn btn-danger" />
+                </div>
+            </form>
+
+            <h5 style="color:red">@ViewData["doYouAgree"]</h5>
+                <h5 style="color:red"> @ViewData["wrongPassword"]</h5>
+        </div>
+    </div>
+</body>
+
+</html>
