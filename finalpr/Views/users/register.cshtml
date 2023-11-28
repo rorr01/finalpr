@@ -1,8 +1,4 @@
-﻿@{
-    ViewData["Title"] = "register";
-}
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <style>
@@ -121,9 +117,10 @@
                 <div class="form-group">
                     <label id="terms">Do you agree</label>
                     <input type="checkbox"
-                           name=""
+                           name="agree"
                            class="checkbox"
-                           id="termsCheckbox" />
+                           id="termsCheckbox"
+                           value="true" />
                 </div>
                 <div class="form-group">
                     <button type="submit"
@@ -136,7 +133,7 @@
                 </div>
             </form>
 
-            <h5 style="color:red">@ViewData["doYouAgree"]</h5>
+            <h5 style="color:red"> @ViewData["doYouAgree"]</h5>
             <h5 style="color:red"> @ViewData["wrongPassword"]</h5>
         </div>
     </div>

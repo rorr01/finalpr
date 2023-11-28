@@ -169,7 +169,21 @@ namespace finalpr.Controllers
 
         public IActionResult login()
         {
-            return View();
+            if (!HttpContext.Request.Cookies.ContainsKey("name"))
+            {
+                ViewData["wrongLoginInfo"] = null;
+                return View();
+            }
+            else
+            {
+                string name = HttpContext.Request.Cookies["name"].ToString();
+                string password = HttpContext.Request.Cookies["password"].ToString();
+                ViewData["name"] = name;
+                ViewData["password"] = password;
+                ViewData["wrongLoginInfo"] = null;
+
+                return View();
+            }
         }
         [HttpPost]
         public IActionResult login(string name, string password, bool autologin)
@@ -246,7 +260,7 @@ namespace finalpr.Controllers
         {
 
             var builder = WebApplication.CreateBuilder();
-            string conStr = builder.Configuration.GetConnectionString("finalprContext");
+            string conStr = builder.Configuration.GetConnectionString("webProject2Context");
             SqlConnection conn = new SqlConnection("Data Source=.\\sqlexpress;Initial Catalog=cvv;Integrated Security=True");
             string sql = "SELECT * FROM users where name= '" + name + "'and password= '" + password + "'";
 
@@ -255,12 +269,12 @@ namespace finalpr.Controllers
             SqlDataReader reader = comm.ExecuteReader();
             if (reader.Read())
             {
-                ViewData["userDoesExists"] = "Windows.alert(\"This user exists, Choose a different name\")";
+                ViewData["userDoesExists"] = "Windows.alert(\"The user does already exists. choose another name\")";
                 return View();
             }
             else if (password != password2)
             {
-                ViewData["wrongPassword"] = "(the passwords donot match)";
+                ViewData["wrongPassword"] = "(the passwords don't match)";
             }
 
             else if (agree == false)
@@ -283,8 +297,14 @@ namespace finalpr.Controllers
             }
 
 
+
+
+
+
+
+
             conn.Close();
-            return View("customerPage");
+            return View();
 
 
         }
