@@ -1,0 +1,96 @@
+﻿<body>
+    >
+    <div class="modal fade" id="insertModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Insert New Item</h4>
+                </div>
+                <div class="modal-body">
+
+
+
+                    @model finalpr.Models.items
+
+                    @{
+                        ViewData["Title"] = "Create";
+                    }
+
+                    <h1 class="text-dark">Create</h1>
+
+                    <link />
+
+                    <h4 class="text">items</h4>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <form asp-action="Create" enctype="multipart/form-data">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label asp-for="name" class="text-dark control-label">Name</label>
+                                    <input asp-for="name" class="form-control" />
+                                    <span asp-validation-for="name" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="description" class="text-dark control-label">Description</label>
+                                    <input asp-for="description" class="form-control" />
+                                    <span asp-validation-for="description" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="price" class="text-dark control-label">Price</label>
+                                    <input asp-for="price" class="form-control" />
+                                    <span asp-validation-for="price" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="quantity" class="text-dark control-label">Quantity</label>
+                                    <input asp-for="quantity" class="form-control" />
+                                    <span asp-validation-for="quantity" class="text-danger"></span>
+                                </div>
+                                <div class="text-dark form-group">
+                                    <label asp-for="discount" class="text-dark  control-label">Discount</label>
+                                    <div class="text checkbox">
+                                        <label class="text-dark"> <input type="radio" asp-for="discount" class="text-dark" value="yes" /> Yes</label>
+                                    </div>
+                                    <div class="text checkbox">
+                                        <label class="text-dark"> <input type="radio" asp-for="discount" class="text-dark" value="no" />No</label>
+                                    </div>
+                                    <span asp-validation-for="discount" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="category" class=" text-dark control-label">Category</label>
+                                    <input asp-for="category" class="form-control" />
+                                    <span asp-validation-for="category" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="text-dark control-label">Pic</label>
+                                    <input type="file" class="form-control" name="image" />
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="submit" value="Create" class="btn btn-primary" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div>
+                        <a asp-action="Index">Back to List</a>
+                    </div>
+
+                    @section Scripts {
+                        @{
+                            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+                        }
+                    }
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

@@ -1,0 +1,72 @@
+﻿@{
+    ViewData["Title"] = "dashboard";
+}
+@{
+    Layout = "~/Views/Shared/adminLayout.cshtml";
+}
+<h1>dashboard</h1>
+<link rel="stylesheet" href="..../wwwroot/css/style.css" />
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Category');
+        data.addColumn('number', 'Books');
+        data.addRows([
+            ['Fantasy', @ViewData["c1"]],
+            ['Mystery', @ViewData["c2"]],
+            ['Adventure', @ViewData["c3"]]
+        ]);
+        var options = {
+            'title': 'Number of Books',
+            'width': 400,
+            'height': 300
+        };
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
+</script>
+
+<h1 class="text-center">Dashboard</h1>
+<hr class="mb-5" />
+
+<body>
+    <div class="container">
+        <div style="float:left" id="chart_div"></div>
+
+        <div class="row">
+
+            <div class="col-md-4">
+                <div class='card'>
+                    <div class='card-header bg-warning text-center'>Fantasy</div>
+                    <div class='card-body'><img src='~/images/TheMartian-850x1236.jpg' ; width='50px'></div>
+                    <div class='card-footer'>
+                        Number of Books <div> @ViewData["c1"] </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class='card'>
+                    <div class='card-header bg-warning text-center'>Mystery</div>
+                    <div class='card-body'><img src='~/images/81dkqO5LAQL._AC_UF894,1000_QL80_.jpg' ; width='50px'></div>
+                    <div class='card-footer'>
+                        Number of Books <div> @ViewData["c2"] </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class='card'>
+                    <div class='card-header bg-warning text-center'>Adventure</div>
+                    <div class='card-body'><img src='~/images/huckleberry-finn.jpg' ; width='50px'></div>
+                    <div class='card-footer'>
+                        Number of Books <div> @ViewData["c3"] </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+</body>

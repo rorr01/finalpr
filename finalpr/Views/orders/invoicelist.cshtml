@@ -1,0 +1,102 @@
+﻿@model IEnumerable<finalpr.Models.orders>
+
+@{
+    ViewData["Title"] = "invoicelist";
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css" />
+<h1>invoicelist</h1>
+@{
+    Layout = "~/Views/Shared/adminLayout.cshtml";
+}
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div id="blackBackground" class="text-light">
+    <form asp-action="invoicelist">
+        <div class="form-group">
+        </div>
+        <div class="form-group">
+            <label class="control-label">Select customer id</label>
+            <select class="form-control" name="role" id="Id" onchange="getorder()">
+                <option value="nothing">
+                    Please select
+
+
+                    @foreach (orders order in Model)
+                    {
+                    <option value="@order.userid">@order.userid</option>
+                    }
+
+                </option>
+
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Select order</label>
+            <select class="form-control" name="order" id="ti"> </select>
+        </div>
+        <input type="submit" value="Show" class="btn btn-primary" />
+    </form>
+    <script>
+        async function getorder() {
+            var Id = document.getElementById('Id').value;
+            var response = await fetch('/APIOrders/' + Id);
+            let x = await response.json();
+            var dd = "<option> Please select</option>";
+            for (i = 0; i < x.length; i++) {
+                dd += "<option value =" + x[i].userid + ">" + x[i].itemid + "</option>";
+            }
+            document.getElementById("ti").innerHTML = dd;
+        }
+    </script>
+
+
+
+
+    <table id="ti" class="table text-light">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.userid)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.itemid)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.buyDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.quantity)
+                </th>
+                <th>
+                    Total
+
+                </th>
+            </tr>
+        </thead>
+        <tbody id="ta">
+
+            @if (ViewData["state"] == null)
+            {
+                int i = 0;
+                @foreach (orders order in Model)
+                {
+                    <tr>
+                        <td>@order.userid</td>
+                        <td>@order.itemid</td>
+                        <td>@order.buyDate</td>
+                        <td>@order.quantity</td>
+                        <td>@ViewData["sum"]</td>
+
+
+
+                    </tr>
+                }
+
+
+
+            }
+
+        </tbody>
+    </table>
+</div>

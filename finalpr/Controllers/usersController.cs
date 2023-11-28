@@ -47,6 +47,7 @@ namespace finalpr.Controllers
             return View(users);
         }
 
+
         // GET: users/Create
         public IActionResult Create()
         {
@@ -58,15 +59,18 @@ namespace finalpr.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,name,role,registerDate")] users users)
+        // Add admin
+        public async Task<IActionResult> Create(string name)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(users);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(users);
+            var builder = WebApplication.CreateBuilder();
+            string conStr = builder.Configuration.GetConnectionString("finalprContext");
+            SqlConnection conn = new SqlConnection("Data Source=.\\sqlexpress;Initial Catalog=cvv;Integrated Security=True");
+            string sql = "Update users set role='admin' where name='" + name + "'";
+            SqlCommand comm = new SqlCommand(sql, conn);
+            conn.Open();
+            comm.ExecuteNonQuery();
+            conn.Close();
+            return View();
         }
 
         // GET: users/Edit/5
@@ -280,12 +284,18 @@ namespace finalpr.Controllers
 
 
             conn.Close();
-            return View();
+            return View("customerPage");
 
 
         }
 
-      
+        public async Task<IActionResult> adminPage()
+        {
+            return View();
+
+        }
+
+
 
         public IActionResult customerPage()
         {
@@ -315,7 +325,7 @@ namespace finalpr.Controllers
                     price = (int)reader["price"],
                     quantity = (int)reader["quantity"],
                     discount = (string)reader["discount"],
-                    category = (int)reader["category"],
+                    category = (string)reader["category"],
                     image = (string)reader["image"]
 
                 });
@@ -354,6 +364,59 @@ namespace finalpr.Controllers
 
         }
 
+
+
+
+
+        //User search and it has an APIUserscontroller
+        public IActionResult roleslist()
+        {
+            List<users> list = new List<users>();
+            var builder = WebApplication.CreateBuilder();
+            string conStr = builder.Configuration.GetConnectionString("finalprContext");
+            SqlConnection conn = new SqlConnection(conStr);
+            string sql = "Select distinct(role) from users  ";
+            SqlCommand comm = new SqlCommand(sql, conn);
+            conn.Open();
+            SqlDataReader reader = comm.ExecuteReader();
+            while (reader.Read())
+            {
+                list.Add(new users { role = (string)reader["role"] });
+
+            }
+            ViewData["state"] = "blanching";
+            conn.Close();
+            return View(list);
+        }
+
+
+        [HttpPost]
+        public IActionResult roleslist(string role)
+        {
+            List<users> list = new List<users>();
+            var builder = WebApplication.CreateBuilder();
+            string conStr = builder.Configuration.GetConnectionString("webProject2Context");
+            SqlConnection conn = new SqlConnection("Data Source=.\\sqlexpress;Initial Catalog=cvv;Integrated Security=True");
+            string sql = "Select * from users where role ='" + role + "' ";
+            SqlCommand comm = new SqlCommand(sql, conn);
+            conn.Open();
+            SqlDataReader reader = comm.ExecuteReader();
+            while (reader.Read())
+            {
+                list.Add(new users
+                {
+                    Id = (int)reader["Id"],
+                    name = (string)reader["name"],
+                    password = (string)reader["password"],
+                    registerDate = (DateTime)reader["registerDate"],
+                    role = (string)reader["role"]
+                });
+
+            }
+            ViewData["state"] = null;
+            conn.Close();
+            return View(list);
+        }
 
         public IActionResult logout()
         {

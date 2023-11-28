@@ -46,6 +46,7 @@ namespace finalpr.Controllers
             return View(orders);
         }
 
+
         // GET: orders/Create
         public IActionResult Create()
         {
@@ -67,7 +68,6 @@ namespace finalpr.Controllers
             }
             return View(orders);
         }
-
         // GET: orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -163,6 +163,68 @@ namespace finalpr.Controllers
 
 
 
+        //Step 12
+        //acts as the order details
+
+        public IActionResult invoicelist()
+        {
+            List<orders> list = new List<orders>();
+            var builder = WebApplication.CreateBuilder();
+            string conStr = builder.Configuration.GetConnectionString("finalprContext");
+            SqlConnection conn = new SqlConnection(conStr);
+            string sql = "Select distinct(userid) from orders  ";
+            SqlCommand comm = new SqlCommand(sql, conn);
+            conn.Open();
+            SqlDataReader reader = comm.ExecuteReader();
+            while (reader.Read())
+            {
+                list.Add(new orders
+                {
+                    userid = (int)reader["userid"]
+                });
+
+            }
+            ViewData["state"] = "blanching";
+            conn.Close();
+            return View(list);
+        }
+
+
+    
+        [HttpPost]
+        public IActionResult invoicelist(string order)
+        {
+            List<orders> list = new List<orders>();
+            var builder = WebApplication.CreateBuilder();
+            string conStr = builder.Configuration.GetConnectionString("finalprContext");
+            SqlConnection conn = new SqlConnection(conStr);
+            string sql = "Select * from orders where userid ='" + order + "' ";
+            SqlCommand comm = new SqlCommand(sql, conn);
+            conn.Open();
+            SqlDataReader reader = comm.ExecuteReader();
+            while (reader.Read())
+            {
+                list.Add(new orders
+                {
+                    Id = (int)reader["Id"],
+                    userid = (int)reader["userid"],
+                    itemid = (int)reader["itemid"],
+                    buyDate = (DateTime)reader["buyDate"],
+                    quantity = (int)reader["quantity"]
+                });
+
+            }
+
+            sql = "SELECT sum(Quantity) from orders where userid='" + order + "'";
+            reader.Close();
+            comm = new SqlCommand(sql, conn);
+            ViewData["sum"] = comm.ExecuteScalar();
+            ViewData["state"] = null;
+            conn.Close();
+            return View(list);
+        }
+
+
 
         public IActionResult mypurchase()
         {
@@ -195,19 +257,25 @@ namespace finalpr.Controllers
             return View(list);
         }
 
-        public IActionResult ourproducts()
+
+
+
+
+
+        public IActionResult buy()
         {
             var builder = WebApplication.CreateBuilder();
             string conStr = builder.Configuration.GetConnectionString("finalprContext");
             SqlConnection conn = new SqlConnection("Data Source=.\\sqlexpress;Initial Catalog=cvv;Integrated Security=True");
-
-            List<items> list = new List<items>();
-            string sql = "select * from items ";
-            SqlCommand command = new SqlCommand(sql, conn);
+            string sql = "select * from items where quantity>0 ";
+            SqlCommand comm = new SqlCommand(sql, conn);
             conn.Open();
-            SqlDataReader reader = command.ExecuteReader();
+            List<items> list = new List<items>();
+            SqlDataReader reader = comm.ExecuteReader();
             while (reader.Read())
             {
+
+
                 list.Add(new items
                 {
                     Id = (int)reader["Id"],
@@ -216,13 +284,87 @@ namespace finalpr.Controllers
                     price = (int)reader["price"],
                     quantity = (int)reader["quantity"],
                     discount = (string)reader["discount"],
-                  
+                    category = (string)reader["category"],
                     image = (string)reader["image"]
                 });
+
+
             }
             conn.Close();
-            reader.Close();
             return View(list);
+        }
+
+        [HttpPost]
+
+        public IActionResult buy(int itemid, int quantity)
+        {
+            var builder = WebApplication.CreateBuilder();
+            string conStr = builder.Configuration.GetConnectionString("finalprContext");
+            SqlConnection conn = new SqlConnection(conStr);
+
+            string name = null;
+            int userid = Convert.ToInt16(HttpContext.Session.GetString("userid"));
+
+            string sql = "SELECT * FROM items where quantity >0";
+
+            SqlCommand comm = new SqlCommand(sql, conn);
+            List<items> list = new List<items>();
+            conn.Open();
+            SqlDataReader reader = comm.ExecuteReader();
+            while (reader.Read())
+            {
+
+                if ((int)reader["quantity"] - quantity <= 0)
+                {
+                    ViewData["buyMessage"] = "Out of stock. sorry";
+                }
+
+                list.Add(new items
+                {
+                    Id = (int)reader["Id"],
+                    name = (string)reader["name"],
+                    description = (string)reader["description"],
+                    price = (int)reader["price"],
+                    quantity = (int)reader["quantity"],
+                    discount = (string)reader["discount"],
+                    category = (string)reader["category"],
+                    image = (string)reader["image"]
+                });
+
+            }
+            reader.Close();
+            sql = "select * from items where Id='" + itemid + "'";
+            comm = new SqlCommand(sql, conn);
+            conn.Close();
+            conn.Open();
+            reader = comm.ExecuteReader();
+            if (reader.Read())
+            {
+
+                name = (string)reader["name"];
+
+            }
+            conn.Close();
+
+            reader.Close();
+            sql = "insert into cart (name,quantity, userid,itemid) values('" + name + "','" + quantity + "','" + userid + "', '" + itemid + "') ";
+            comm = new SqlCommand(sql, conn);
+            conn.Open();
+
+            comm.ExecuteNonQuery();
+            conn.Close();
+
+
+            sql = " update items set quantity = quantity - '" + quantity + "' where Id='" + itemid + "'";
+            comm = new SqlCommand(sql, conn);
+            conn.Open();
+            comm.ExecuteNonQuery();
+
+            ViewData["buyMessage"] = "Added to cart";
+            conn.Close();
+            return View(list);
+
+
         }
 
     }

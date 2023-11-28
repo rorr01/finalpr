@@ -4,68 +4,53 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.quantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.discount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.image)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.discount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.category)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.image)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+<h1 style="color:white">Index</h1>
+@{
+    Layout = "~/Views/Shared/adminLayout.cshtml";
 }
-    </tbody>
-</table>
+
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#insertModal"> Create</button>
+@await Html.PartialAsync("insertitem",new items())
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        @foreach (items item in Model)
+        {
+            <div class="col-md-4" v>
+
+                <div class="card mb-4">
+                    <img class="card-img-top" src="~/images/@item.image" width="150px">
+                    <div class="card-body">
+                        <h5 class="card-title text-dark">@item.name</h5>
+                        <p class="card-text text-dark"> Quantity: @item.quantity</p>
+                    </div>
+                    <div class="card-footer">
+                        <table>
+
+                            <tr>
+
+                                <td>
+                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="@("#editModal-" + @item.Id)">edit</button>
+                                    @await Html.PartialAsync("editbook",item)
+                                <td>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@("#deleteModal-" + @item.Id)">Delete</button>
+                                        @await Html.PartialAsync("deletebook",item)
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="@("#detailModal-" + @item.Id)">Detail</button>
+                                        @await Html.PartialAsync("detailbook",item)
+                                </td>
+                            </tr>
+
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+

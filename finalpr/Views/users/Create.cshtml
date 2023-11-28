@@ -1,43 +1,38 @@
 ﻿@model finalpr.Models.users
-
 @{
-    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/adminLayout.cshtml";
 }
-
 <h1>Create</h1>
 
 <h4>users</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="name" class="control-label"></label>
-                <input asp-for="name" class="form-control" />
-                <span asp-validation-for="name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="role" class="control-label"></label>
-                <input asp-for="role" class="form-control" />
-                <span asp-validation-for="role" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="registerDate" class="control-label"></label>
-                <input asp-for="registerDate" class="form-control" />
-                <span asp-validation-for="registerDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+<div id="loginPage" class="container-sm" style="margin:auto ">
 
-<div>
+
+    <form asp-action="Create">
+
+
+        <div class="row">
+
+            <div class="col">
+
+                <div style="block-size:auto" class="form-group">
+                    <label style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">Name:</label>
+                    <input style="" name="name" class=" m-auto" /><br />
+                    <button type="submit" style="margin-left:50px" class="btn btn-primary">Rais to admin</button>
+
+                </div>
+            </div>
+        </div>
+
+    </form>
     <a asp-action="Index">Back to List</a>
+</div>
+<div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using finalpr.Data;
 using finalpr.Models;
+using Microsoft.Data.SqlClient;
 
 namespace finalpr.Controllers
 {
@@ -30,6 +31,8 @@ namespace finalpr.Controllers
         // GET: items/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+
+            ViewData["role"] = HttpContext.Session.GetString("role");
             if (id == null || _context.items == null)
             {
                 return NotFound();
@@ -158,6 +161,60 @@ namespace finalpr.Controllers
         private bool itemsExists(int id)
         {
           return (_context.items?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+
+        //image slider
+        public IActionResult ourproducts()
+        {
+            var builder = WebApplication.CreateBuilder();
+            string conStr = builder.Configuration.GetConnectionString("finalprContext");
+            SqlConnection conn = new SqlConnection("Data Source=.\\sqlexpress;Initial Catalog=cvv;Integrated Security=True");
+
+            List<items> list = new List<items>();
+            string sql = "select * from items ";
+            SqlCommand command = new SqlCommand(sql, conn);
+            conn.Open();
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                list.Add(new items
+                {
+                    Id = (int)reader["Id"],
+                    name = (string)reader["name"],
+                    description = (string)reader["description"],
+                    price = (int)reader["price"],
+                    quantity = (int)reader["quantity"],
+                    discount = (string)reader["discount"],
+
+                    image = (string)reader["image"]
+                });
+            }
+            conn.Close();
+            reader.Close();
+            return View(list);
+        }
+
+
+        public IActionResult dashboard()
+        {
+
+            var builder = WebApplication.CreateBuilder();
+            string conStr = builder.Configuration.GetConnectionString("finalprContext");
+            SqlConnection conn = new SqlConnection("Data Source=.\\sqlexpress;Initial Catalog=cvv;Integrated Security=True");
+            string sql = "select count(quantity) from items where category= 'Fantasy' ";
+            SqlCommand command = new SqlCommand(sql, conn);
+            conn.Open();
+
+            ViewData["c1"] = (int)command.ExecuteScalar();
+            sql = "select count(quantity) from items where category= 'Mystery' ";
+            command = new SqlCommand(sql, conn);
+            ViewData["c2"] = (int)command.ExecuteScalar();
+            sql = "select count(quantity) from items where category= 'Adventure' ";
+            command = new SqlCommand(sql, conn);
+            ViewData["c3"] = command.ExecuteScalar();
+            conn.Close();
+            return View();
         }
     }
 }

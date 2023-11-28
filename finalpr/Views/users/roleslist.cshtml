@@ -1,0 +1,87 @@
+﻿@model IEnumerable<finalpr.Models.users>
+
+@{
+    ViewData["Title"] = "roleslist";
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css" />
+<h1>users roles</h1>
+@{
+    Layout = "~/Views/Shared/adminLayout.cshtml";
+}
+<style>
+    body {
+        color: white
+    }
+</style>
+<body>
+    <div id="blackBackground">
+
+        <div class="form-group">
+        </div>
+        <div class="form-group">
+            <label class="control-label">Select role</label>
+            <select class="form-control" name="role" id="role">
+                <option value="nothing">
+                    Please select
+                </option>
+
+                @foreach (users user in Model)
+                {
+                    <option value="@user.role">@user.role</option>
+                }
+
+
+
+            </select>
+        </div>
+
+        <button class="btn btn-primary" onclick="getrole()">Show</button>
+
+
+
+
+
+
+        <table id="ti" class="table text-light">
+            <thead>
+                <tr style="color:white">
+                    <th>
+                        @Html.DisplayNameFor(model => model.name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.password)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.registerDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.role)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="ta">
+            </tbody>
+
+
+
+        </table>
+    </div>
+
+
+</body>
+<script>
+    async function getrole() {
+        var role = document.getElementById('role').value;
+        var response = await fetch('/APIUsers/' + role);
+        let x = await response.json();
+
+        dd = ""
+
+        for (var i = 0; i < x.length; i++) {
+
+            dd += "<tr> <td>" + x[i].name + "</td> <td>" + x[i].password + "</td><td>" + x[i].registerDate + "</td><td>" + x[i].role + "</td>  </tr>"
+        }
+        document.getElementById("ta").innerHTML = dd;
+    }
+</script>
